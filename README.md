@@ -1,11 +1,17 @@
 DaemonPID
 ==========
 
-DaemonPID is a utility module which provides straight-forward and robust PID file management; perfect for writing and reading PID files for daemonized services. It provides the ability to check or monitor the status of previously launched child processes, store additional data along with the process id, and provides process start-time verification to ensure the recorded process-id was not recycled by the OS.
+DaemonPID is a NodeJS utility module which provides straight-forward and robust PID file management; perfect for writing and reading PID files for daemonized services. It provides the ability to check or monitor the status of previously launched child processes, store additional data along with the process id, and provides process start-time verification to ensure the recorded process-id was not recycled by the OS.
 
 - [Basic Usage](#basic-usage)
 - [Advance Usage](#advanced-usage)
 - [API](#api)
+
+**Warning: this module is for POSIX systems and will not function on Windows. If you're a Windows veteran and would like to make it work, please feel free to contribute!**
+
+-----------------------
+
+
 
 
 ## What is a PID file?
@@ -17,9 +23,13 @@ way to check the status of services or daemonized processes without requiring
 separate supervisory or monitoring processes.
 
 
+
+
 ## PID File Pitfalls 
 
 Process IDs are not required to be unique and can potentially be recycled. To solve this issue, DaemonPID also records and checks the start-time of the process for future comparison and status checks.
+
+
 
 
 ## Basic Usage
@@ -63,7 +73,10 @@ Here's a basic use-case of DaemonPID in a daemonized process.
             console.error('service is down!');
         }
     });
-    
+
+
+
+
 ## Advanced Usage
     
 ### Storing Data
@@ -104,6 +117,85 @@ It's easy to implement a simple status-monitor as a separate process.
         }
     });
 
+
+
+
+
 ## API
 
-TODO
+-------------
+
+### write(callback, data)
+
+Creates the PID file and writes it to the filesystem.
+
+#### Arguments
+
+- `callback(err)` - Called when the write is complete with a possible error.
+- `data` - Additional (JSON-able) data to store.
+
+-------------
+
+### read(callback)
+
+Reads the PID file from the filesystem.
+
+#### Arguments
+
+- `callback(err, data)` - Called with possible error and data stored using `write()`.
+
+-------------
+
+### delete(callback)
+
+Deletes the associated pid file.
+
+#### Arguments
+
+- `callback(err)` - Called with possible error.
+
+-------------
+
+### running(callback)
+
+Checks if the associated process is currently running.
+
+#### Arguments
+
+- `callback(err, running, data)` - Called with possible error, boolean `running` indicating if the process is running and additionally the `data` stored in the pid file using `write()`.
+
+-------------
+
+### uptime(callback)
+
+Retrieves the time in seconds the process referenced by the pid file has been running.
+
+#### Arguments
+
+- `callback(err, seconds)` - Called with possible error and process uptime in seconds.
+
+-------------
+
+### started(callback)
+
+Retrieves a `Date` object representing the date and time the process referenced by the pid file was started.
+ 
+#### Arguments
+
+- `callback(err, date)` - Called with possible error and the date/time the process was started.
+
+-------------
+
+### monitor(callback, interval = 5000)
+
+Creates a monitoring interval which periodically (every five seconds by default) checks that the associated process is still running. If it stops, for any reason, or it cannot access the pid file, the `callback` function is called.
+
+#### Arguments
+
+- `callback(err)` - Called if the process stops or an error occurs accessing the pid file. If `err` is undefined, then no error occurred and the process is not running (see example above).
+
+-------------
+
+### stop()
+
+Stops monitoring the associated process.
