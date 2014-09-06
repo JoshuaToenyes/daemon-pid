@@ -1,0 +1,44 @@
+{
+  "name": "daemon-pid",
+  "description": "Simple pid file management for daemon processes.",
+  "author": "Joshua Toenyes <joshua.toenyes@me.com>",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/daemon-pid.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JoshuaToenyes/daemon-pid"
+  },
+  "bugs": {
+    "url": "https://github.com/JoshuaToenyes/daemon-pid/issues"
+  },
+  "dependencies": {
+    "async": "0.9.x"
+  },
+  "devDependencies": {
+    "chai": "1.9.x",
+    "grunt": "0.4.x",
+    "grunt-coffeelint": "0.0.13",
+    "grunt-contrib-coffee": "0.11.x",
+    "grunt-contrib-clean": "0.6.x",
+    "grunt-mocha-test": "0.11.x",
+    "grunt-contrib-watch": "0.6.x"
+  },
+  "keywords": [
+    "child",
+    "daemon",
+    "exec",
+    "file",
+    "monitor",
+    "pid",
+    "process",
+    "running",
+    "spawn", 
+    "sys",
+    "util"
+  ],
+  "scripts": {
+    "prepublish": "grunt compile",
+    "test": "grunt test"
+  }
+}
