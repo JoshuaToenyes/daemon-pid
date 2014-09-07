@@ -219,3 +219,21 @@ describe 'daemon-pid', ->
         expect(err).to.exist
         done()
       , 10)
+
+
+  describe '#pid', ->
+    
+    it 'should retrieve the pid', (done) ->
+      dp.write (err) ->
+        expect(err).to.not.exist
+        dp.pid (err, pid) ->
+          expect(err).to.not.exist
+          expect(pid).to.equal(process.pid)
+          done()
+          
+    it 'should error if the process isn\'t running', (done) ->
+      writeFakePidFile(-1, Date.now())
+      dp.pid (err) ->
+        expect(err).to.exist
+        done()
+        

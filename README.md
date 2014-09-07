@@ -186,6 +186,27 @@ Retrieves a `Date` object representing the date and time the process referenced 
 
 -------------
 
+### kill(signal, callback)
+
+Sends the passed signal to the process (basically a shortcut for process.kill).
+
+#### Arguments
+
+- `signal` - The signal to send, 'SIGTERM', 'SIGKILL', etc.
+- `callback(err)` - Called if an error occurred with passing the signal, or if the process is not running.
+
+-------------
+
+### pid(callback)
+
+Retrieves the process-id of the referenced process.
+
+#### Arguments
+
+- `callback(err, pid)` - Callback passed a possible error and the pid of the running process. An error pass if the process is not running.
+
+-------------
+
 ### monitor(callback, interval = 5000)
 
 Creates a monitoring interval which periodically (every five seconds by default) checks that the associated process is still running. If it stops, for any reason, or it cannot access the pid file, the `callback` function is called.

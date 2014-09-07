@@ -119,6 +119,38 @@ class DaemonPid
     clearInterval(@_monitor)
 
 
+  # Sends the given signal to the process referenced by the associated pid file.
+  # Calls the given callback with (err).
+  kill: (signal, cb) ->
+    @_errorIfNotRunning cb, =>
+      @_read (err, [pid]) ->
+        try
+          process.kill pid, signal
+          cb.call null, undefined
+        catch e
+          cb.call null, e
+
+  # Calls the given callback with a possible error and the pid of the process
+  # referenced by the associated pid file.
+  pid: (cb) ->
+    @_errorIfNotRunning cb, =>
+      @_read (err, [pid]) ->
+        cb.call null, err, pid
+
+
+  # Internal-use method for testing if the process is running. If not, the given
+  # client-provided callback function is called with the appropriate error.
+  _errorIfNotRunning: (cb, cont) ->
+    @_running (err, running) ->
+      if err
+        cb.call null, err
+        return
+      if not running
+        cb.call null, new Error('Process not running.')
+        return
+      cont()
+
+
   # Internal-use method for testing if the process references by the associated
   # pid file is running. Calls the passed callback with
   # (err, running, actualStart, data).
