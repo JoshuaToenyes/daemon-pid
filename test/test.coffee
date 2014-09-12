@@ -119,9 +119,9 @@ describe 'daemon-pid', ->
 
   describe '#running', ->
 
-    it 'should error if the pid file has not been written', (done) ->
+    it 'should not error if the pid file has not been written', (done) ->
       cb = (err, running) ->
-        expect(err).to.exist
+        expect(err).to.not.exist
         expect(running).to.be.false
         done()
       dp.running(cb)
@@ -206,7 +206,7 @@ describe 'daemon-pid', ->
       dp.write((err) ->
         expect(err).to.not.exist
         dp.monitor((err) ->
-          expect(err).to.exist
+          expect(err).to.not.exist
           dp.stop()
           done()
         , 50)
@@ -216,9 +216,9 @@ describe 'daemon-pid', ->
 
     it 'should error if the process isn\'t running', (done) ->
       dp.monitor((err) ->
-        expect(err).to.exist
+        expect(err).to.not.exist
         done()
-      , 10)
+      , 100)
 
 
   describe '#pid', ->

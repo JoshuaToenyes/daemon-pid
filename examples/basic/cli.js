@@ -54,11 +54,11 @@ switch (command) {
     
     // Let's quickly check if the server is already running.
     pid.running(function(err, running) {
-
-      if (!running) {
+      if (err) {
+        console.error('Error reading the pid file!');
+      } else if (!running) {
         console.log('Server is not running.');
         process.exit(-1);
-        
       } else {
         pid.kill('SIGTERM', function(err) {
           if (err) {
@@ -74,7 +74,9 @@ switch (command) {
     
     // Let's quickly check if the server is already running.
     pid.running(function(err, running) {
-      if (!running) {
+      if (err) {
+        console.error('Error reading the pid file!');
+      } if (!running) {
         console.log('The server is NOT running.');
       } else {
         console.log('The server is running.');

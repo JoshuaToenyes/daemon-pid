@@ -91,10 +91,16 @@ class DaemonPid
 
   # Determines if the process referenced by the associated pid file is currently
   # running. Additionally, it will parse the data in the pid file and calling
-  # the passed callback with (err, running, data).
+  # the passed callback with (err, running, data). The callback parameter `err`
+  # will only be present if the pid file exists, and there was an error reading
+  # it, i.e. err will not be present if the pid file does not exists, which
+  # implies the process is not running.
   running: (cb) ->
-    @_running((err, running, actualStart, data) ->
-      cb?.call null, err, running, data)
+    @_running (err, running, actualStart, data) ->
+      if err and err.code is 'ENOENT'
+        cb?.call null, undefined, false, undefined
+      else
+        cb?.call null, err, running, data
 
 
   # Monitors the process referenced by the associated pid file. Calls the passed
@@ -109,6 +115,7 @@ class DaemonPid
     check = =>
       @running (err, running) ->
         if err or not running
+          clearInterval @_monitor
           cb?.call null, err
     @_monitor = setInterval(check, interval)
     return
@@ -151,7 +158,7 @@ class DaemonPid
       cont()
 
 
-  # Internal-use method for testing if the process references by the associated
+  # Internal-use method for testing if the process referenced by the associated
   # pid file is running. Calls the passed callback with
   # (err, running, actualStart, data).
   _running: (cb) ->
@@ -162,12 +169,10 @@ class DaemonPid
             cb?.call null, undefined, false
           else
             callback.call null, err, pid, recordedStart, data )
-    ,
-      (pid, recordedStart, data, callback) =>
+    , (pid, recordedStart, data, callback) =>
         @_started(pid, (err, actualStart) ->
           callback.call null, err, recordedStart, actualStart, data)
-    ,
-      (recordedStart, actualStart, data, callback) ->
+    , (recordedStart, actualStart, data, callback) ->
         running = Math.abs(actualStart.getTime() - recordedStart) < 1000
         callback.call null, undefined, running, actualStart, data
     ], (err, running, actualStart, data) ->
