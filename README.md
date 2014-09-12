@@ -44,6 +44,13 @@ Here's a basic use-case of DaemonPID in a daemonized process.
     pid.write(function(err) {
         // err indicates error writing pid file
     });
+    
+    // on SIGTERM delete the pid file
+    process.on('SIGTERM', function() {
+      pid.delete(function(err) {
+        if (err) console.error('Something we wrong deleting the pid file!');
+      });
+    });
 
 ### Inside Launch Script or CLI
 
@@ -52,8 +59,8 @@ Here's a basic use-case of DaemonPID in a daemonized process.
     
     child = spawn('node', [SERVICE_FILE], {
         detached: true,
-        stdio ['ignore']
-    };
+        stdio: ['ignore']
+    });
     
     // remove the pid file on exit
     child.on('close', function(code) {
@@ -118,12 +125,18 @@ It's easy to implement a simple status-monitor as a separate process.
     });
 
 
+## Examples
 
+Currently, there's a single example in `examples/`. 
+
+(Examples are not included in the npm package. Please download or clone the repo at [https://github.com/JoshuaToenyes/daemon-pid](https://github.com/JoshuaToenyes/daemon-pid) for the example files.)
+
+### Basic Use Case Example
+
+The basic example offers a very simple CLI in `cli.js` and the canonical "Hello World" web server as a service to be daemonized (in `server.js`). Just `cd` into that directory and run `node cli.js start` to start the server, `node cli.js stop` to stop it, and `node cli.js status` to see the current status of the server process.
 
 
 ## API
-
--------------
 
 ### write(callback, data)
 
