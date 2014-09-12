@@ -9,8 +9,6 @@ DaemonPID is a NodeJS utility module which provides straight-forward and robust 
 
 **Warning: this module is for POSIX systems and will not function on Windows. If you're a Windows veteran and would like to make it work, please feel free to contribute!**
 
------------------------
-
 
 
 
@@ -230,6 +228,6 @@ Creates a monitoring interval which periodically (every five seconds by default)
 
 -------------
 
-### stop()
+### unmonitor()
 
 Stops monitoring the associated process.

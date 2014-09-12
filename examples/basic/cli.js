@@ -26,9 +26,10 @@ switch (command) {
     // Let's quickly check if the server is already running.
     pid.running(function(err, running) {
       
-      // err will indicate if it can't read the pid file... which we'd expect
-      // if the pid file doesn't exist. So here, we can just check `running`.
-      if (running) {
+      // `err` indicates the pid file exists, but could not be read.
+      if (err) {
+        console.error('Error reading the pid file!');
+      } else if (running) {
         console.log('Server is already running.');
         process.exit(-1);
         
@@ -54,6 +55,8 @@ switch (command) {
     
     // Let's quickly check if the server is already running.
     pid.running(function(err, running) {
+
+      // `err` indicates the pid file exists, but could not be read.
       if (err) {
         console.error('Error reading the pid file!');
       } else if (!running) {
@@ -74,6 +77,8 @@ switch (command) {
     
     // Let's quickly check if the server is already running.
     pid.running(function(err, running) {
+
+      // `err` indicates the pid file exists, but could not be read.
       if (err) {
         console.error('Error reading the pid file!');
       } if (!running) {

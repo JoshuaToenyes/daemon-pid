@@ -122,7 +122,7 @@ class DaemonPid
 
 
   # Stops monitoring the referenced process.
-  stop: ->
+  unmonitor: ->
     clearInterval(@_monitor)
 
 
