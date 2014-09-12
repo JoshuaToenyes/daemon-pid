@@ -2,7 +2,7 @@
   "name": "daemon-pid",
   "description": "Simple pid file management for daemon processes.",
   "author": "Joshua Toenyes <joshua.toenyes@me.com>",
-  "version": "1.0.0-b.2",
+  "version": "1.0.0-b.3",
   "license": "MIT",
   "main": "dist/daemon-pid.js",
   "repository": {

@@ -207,7 +207,7 @@ describe 'daemon-pid', ->
         expect(err).to.not.exist
         dp.monitor((err) ->
           expect(err).to.not.exist
-          dp.stop()
+          dp.unmonitor()
           done()
         , 50)
         setTimeout(->
